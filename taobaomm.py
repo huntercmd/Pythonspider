@@ -1,8 +1,13 @@
+#!/url/bin/env python
+# -*- coding: utf-8 -*-
 from spider import SpiderHTML
 import re,os,sys,time,urllib,random,http
 '''
 抓取淘宝模特的靓图
 '''
+
+
+# TODO: osx 下面会出ssl的错误 SSLV3_ALERT_HANDSHAKE_FAILURE
 
 class TaobaommSpider(SpiderHTML):
 	#抓取起始页，结束页，每个妹子抓取的图片数量
@@ -57,7 +62,7 @@ class TaobaommSpider(SpiderHTML):
 						pass
 					except KeyError as e:
 						pass
-					except http.client.IncompleteRead:
+					except Exception, e:
 						pass
 
 					if i >= self._limit:

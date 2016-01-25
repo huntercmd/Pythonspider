@@ -1,19 +1,21 @@
 # -*- coding:utf-8 -*-
 
 from spider import SpiderHTML
-import sys,urllib,http,os,random,re,time
+import sys,urllib2,http,os,random,re,time
 __author__ = 'waiting'
 '''
-使用了第三方的类库 BeautifulSoup4，请自行安装
-需要目录下的spider.py文件
-运行环境：python3.4,windows7
+使用了第三方的类库 BeautifulSoup4,需要spider.py文件
 '''
 
 #收藏夹的地址
-url = 'https://www.zhihu.com/collection/69135664'  #page参数改为代码添加
+url = 'https://www.zhihu.com/collection/69135664?page='
 
 #本地存放的路径,不存在会自动创建
-store_path = 'E:\\zhihu\收藏夹\\攻不可破的大美妞阵线联盟'
+store_path = '/Users/king/Pictures/zhihu/攻不可破的大美妞阵线联盟'
+
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 class zhihuCollectionSpider(SpiderHTML):
 	def __init__(self,pageStart, pageEnd, url):
@@ -24,7 +26,7 @@ class zhihuCollectionSpider(SpiderHTML):
 
 	def start(self):
 		for page in range(self._pageStart,self._pageEnd):		#收藏夹的页数
-			url = self._url + '?page='+str(page)
+			url = self._url + str(page)
 			content = self.getUrl(url)
 			questionList = content.find_all('div',class_='zm-item')
 			for question in questionList:						#收藏夹的每个问题
@@ -49,7 +51,7 @@ class zhihuCollectionSpider(SpiderHTML):
 			
 			upvoted = int(answer.find('span',class_='count').string.replace('K','000')) 	#获得此答案赞同数
 			if upvoted < 100:
-				continue
+				pass
 			authorInfo = answer.find('div',class_='zm-item-answer-author-info')				#获取作者信息
 			author = {'introduction':'','link':''}
 			try:
@@ -92,18 +94,19 @@ class zhihuCollectionSpider(SpiderHTML):
 			imgUrl = img['src']
 			extension = os.path.splitext(imgUrl)[1]
 			path_name = os.path.join(store_path,Qtitle,author['name']+'_'+str(i)+extension)
+			print "Image_CrawedUrl:", imgUrl
+			print "Image_Save_Path:", path_name
 			try:
-				self.saveImg(imgUrl,path_name)					#捕获各种图片异常，流程不中断
+				self.saveImg(imgUrl,path_name)	#捕获各种图片异常，流程不中断
 			except ValueError:									
-				pass
-			except urllib.error.HTTPError as e:
 				pass
 			except KeyError as e:
 				pass
-			except http.client.IncompleteRead:
+			except Exception, e:
+				print str(e)
 				pass
 	#收录文字
-	def _getTextFromAnswer(self):
+	def getTextFromAnswer(self):
 		pass
 
 #例：zhihu.py 1 5   获取1到5页的数据
