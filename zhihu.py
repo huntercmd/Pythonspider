@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 
 from spider import SpiderHTML
-import sys,urllib2,http,os,random,re,time
+import sys,urllib2,os,random,re,time
 __author__ = 'waiting'
 '''
 使用了第三方的类库 BeautifulSoup4,需要spider.py文件
@@ -11,7 +11,7 @@ __author__ = 'waiting'
 url = 'https://www.zhihu.com/collection/69135664?page='
 
 #本地存放的路径,不存在会自动创建
-store_path = '/Users/king/Pictures/zhihu/攻不可破的大美妞阵线联盟'
+store_path = os.path.join(os.getcwd(),'攻不可破的大美妞阵线联盟')
 
 import sys
 reload(sys)
